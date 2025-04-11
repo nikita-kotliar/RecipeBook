@@ -8,11 +8,15 @@
     "doc": "docs"
   },
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "start": "node src/index.js",
     "start:dev": "nodemon src/index.js",
     "build": "npm run build-docs",
     "build-docs": "redocly bundle --ext json -o docs/swagger.json",
     "preview-docs": "redocly preview-docs"
+  },
+  "resolutions": {
+    "debug": "^4.3.4"
   },
   "author": "",
   "license": "ISC",
