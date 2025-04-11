@@ -1,0 +1,22 @@
+description: Fail upload avatar
+content:
+  application/json:
+    schema:
+      type: object
+      required:
+        - status
+        - message
+        - data
+      properties:
+        status:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: 'Bad request'
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+              example: 'File not provided'

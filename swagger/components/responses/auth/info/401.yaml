@@ -1,0 +1,22 @@
+description: Fail get info
+content:
+  application/json:
+    schema:
+      type: object
+      required:
+        - status
+        - message
+        - data
+      properties:
+        status:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: 'Unauthorized'
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+              example: 'Not authorized'

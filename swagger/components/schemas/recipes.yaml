@@ -1,0 +1,29 @@
+type: object
+required:
+  - id
+  - name
+  - ingredients
+  - instructions
+properties:
+  id:
+    description: The recipe id
+    type: string
+    example: 60d0fe4f5311236168a109ca
+  name:
+    description: The recipe name
+    type: string
+    example: "Spaghetti Carbonara"
+  ingredients:
+    description: The recipe ingredients
+    type: array
+    items:
+      type: string
+    example: ["spaghetti", "eggs", "bacon"]
+  instructions:
+    description: The recipe instructions
+    type: string
+    example: "Boil spaghetti, cook bacon, mix with eggs."
+  serving_size:
+    description: The recipe serving size
+    type: number
+    example: 2

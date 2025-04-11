@@ -1,0 +1,39 @@
+tags:
+  - Recipe
+summary: Add recipe
+operationId: addRecipe
+description: 'Add a new recipe'
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - name
+          - ingredients
+          - instructions
+        properties:
+          name:
+            type: string
+            example: 'Spaghetti Carbonara'
+            description: 'Name of the recipe'
+          ingredients:
+            type: array
+            items:
+              type: string
+            example: ['Spaghetti', 'Bacon', 'Eggs', 'Parmesan cheese']
+            description: 'List of ingredients required for the recipe'
+          instructions:
+            type: string
+            example: 'Cook spaghetti. Fry bacon. Mix eggs with cheese. Combine all ingredients.'
+            description: 'Step-by-step instructions to prepare the recipe'
+responses:
+  '201':
+    $ref: ../../../components/responses/recipe/create/201.yaml
+  '400':
+    $ref: ../../../components/responses/recipe/400.yaml
+  '401':
+    $ref: ../../../components/responses/recipe/401.yaml

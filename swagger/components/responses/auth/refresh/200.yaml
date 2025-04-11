@@ -1,0 +1,9 @@
+description: Successfully fefresh
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        token:
+          type: string
+          example: '6IkpXVCJ9.eyJpZCI'

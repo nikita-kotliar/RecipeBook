@@ -1,0 +1,22 @@
+description: Fail register
+content:
+  application/json:
+    schema:
+      type: object
+      required:
+        - status
+        - message
+        - data
+      properties:
+        status:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: 'Bad request'
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+              example: 'Password is not allowed to be empty'

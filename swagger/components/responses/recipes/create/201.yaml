@@ -1,0 +1,32 @@
+description: Successfully add recipe
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        status:
+          type: number
+          example: 201
+        message:
+          type: string
+          example: Successfully created a recipe!
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              example: 6693b609d6192024db757e57
+            name:
+              type: string
+              example: 'Pasta Primavera'
+            ingredients:
+              type: array
+              items:
+                type: string
+              example: ['Pasta', 'Tomatoes', 'Olive oil', 'Garlic']
+            instructions:
+              type: string
+              example: 'Cook pasta, sauté garlic in olive oil, add tomatoes, and mix.'
+            percentage:
+              type: number
+              example: 10.5

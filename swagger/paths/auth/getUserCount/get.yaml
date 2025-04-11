@@ -1,0 +1,12 @@
+tags:
+  - Users
+summary: Get count Users
+operationId: countUsers
+description: Retrieve the count of users
+security:
+  - bearerAuth: []
+responses:
+  '200':
+    $ref: ../../../components/responses/auth/getUserCount/200.yaml
+  '400':
+    $ref: ../../../components/responses/auth/getUserCount/400.yaml

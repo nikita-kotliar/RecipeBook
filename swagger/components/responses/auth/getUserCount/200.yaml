@@ -1,0 +1,9 @@
+description: Successfully get count
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        count:
+          type: string
+          example: '5'

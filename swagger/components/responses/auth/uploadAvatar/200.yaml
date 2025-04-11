@@ -1,0 +1,9 @@
+description: Successfully upload Avatar
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        photo:
+          type: string
+          example: 'https://res.cloudinary.com/uqwgdu/image/upload/image.png'

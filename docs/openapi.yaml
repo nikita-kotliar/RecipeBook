@@ -1,0 +1,137 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: RecipeBook API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  description: >
+    This is a documentation of RecipeBook app tags
+tags:
+  - name: Users
+    description: Users operations.
+  - name: Recipes
+    description: Operations about recipes.
+servers:
+  - url: https://RecipeBook.onrender.com
+paths:
+  /users/login:
+    post:
+      $ref: ../swagger/paths/auth/login/post.yaml
+  /users/register:
+    post:
+      $ref: ../swagger/paths/auth/register/post.yaml
+  /users/refresh:
+    post:
+      $ref: ../swagger/paths/auth/refresh/post.yaml
+  /users/logout:
+    post:
+      $ref: ../swagger/paths/auth/logout/post.yaml
+  /users/info:
+    get:
+      $ref: ../swagger/paths/auth/info/get.yaml
+    patch:
+      $ref: ../swagger/paths/auth/info/patch.yaml
+  /users/count:
+    get:
+      $ref: ../swagger/paths/auth/getUserCount/get.yaml
+  /users/photo:
+    patch:
+      $ref: ../swagger/paths/auth/photo/patch.yaml
+  /recipes:
+    get:
+      tags:
+        - Recipes
+      summary: Get all recipes
+      operationId: getAllRecipes
+      description: Retrieve all recipes available.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: A list of all recipes.
+        "400":
+          description: Bad request. Invalid parameters.
+        "401":
+          description: Unauthorized. Please log in.
+    post:
+      tags:
+        - Recipes
+      summary: Add a new recipe
+      operationId: addRecipe
+      description: Create a new recipe.
+      security:
+        - bearerAuth: []
+      responses:
+        "201":
+          description: Recipe created successfully.
+        "400":
+          description: Bad request. Invalid data.
+        "401":
+          description: Unauthorized. Please log in.
+  /recipes/{id}:
+    get:
+      tags:
+        - Recipes
+      summary: Get a specific recipe
+      operationId: getRecipe
+      description: Retrieve a specific recipe by its ID.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "60d0fe4f5311236168a109ca"
+      responses:
+        '200':
+          description: The recipe details.
+        '404':
+          description: Recipe not found.
+    patch:
+      tags:
+        - Recipes
+      summary: Update an existing recipe
+      operationId: updateRecipe
+      description: Update a specific recipe.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "60d0fe4f5311236168a109ca"
+      responses:
+        '200':
+          description: Recipe updated successfully.
+        '404':
+          description: Recipe not found.
+    delete:
+      tags:
+        - Recipes
+      summary: Delete a recipe
+      operationId: deleteRecipe
+      description: Delete a specific recipe by its ID.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "60d0fe4f5311236168a109ca"
+      responses:
+        '200':
+          description: Recipe deleted successfully.
+        '404':
+          description: Recipe not found.
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

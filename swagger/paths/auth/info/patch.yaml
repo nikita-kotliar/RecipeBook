@@ -1,0 +1,46 @@
+tags:
+  - Users
+summary: Patch user
+operationId: patchUser
+description: 'Patch a user with payload'
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          email:
+            description: "User's email"
+            type: string
+            example: user@email.com
+          name:
+            description: "User's name"
+            type: string
+            example: 'John Doe'
+          weight:
+            description: "User's weight"
+            type: number
+            example: 50
+          dailyActiveTime:
+            description: "User's daily active time"
+            type: number
+            example: 2
+          dailyWaterConsumption:
+            description: "User's daily water consumption"
+            type: number
+            example: 1.5
+          gender:
+            description: "User's gender"
+            type: string
+            enum: ['woman', 'man']
+
+responses:
+  '200':
+    $ref: ../../../components/responses/auth/updateUser/200.yaml
+  '401':
+    $ref: ../../../components/responses/auth/updateUser/401.yaml
+  '400':
+    $ref: ../../../components/responses/auth/updateUser/400.yaml

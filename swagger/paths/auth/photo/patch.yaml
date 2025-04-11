@@ -1,0 +1,26 @@
+tags:
+  - Users
+summary: User Avatar
+operationId: userAvatar
+description: Upload or update user avatar
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    multipart/form-data::
+      schema:
+        type: object
+        required:
+          - avatar
+        properties:
+          avatar:
+            type: string
+            format: binary
+responses:
+  '200':
+    $ref: ../../../components/responses/auth/uploadAvatar/200.yaml
+  '401':
+    $ref: ../../../components/responses/auth/uploadAvatar/401.yaml
+  '400':
+    $ref: ../../../components/responses/auth/uploadAvatar/400.yaml

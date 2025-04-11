@@ -1,0 +1,60 @@
+tags:
+  - Recipe
+summary: Updated the recipe details
+operationId: editRecipe
+description: 'Updated the recipe details'
+security:
+  - bearerAuth: []
+parameters:
+  - name: id
+    in: path
+    required: true
+    schema:
+      type: string
+      example: 60d0fe4f5311236168a109ca
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        anyOf:
+          - required: ['name']
+            properties:
+              name:
+                type: string
+                example: "Spaghetti Carbonara"
+          - required: ['ingredients']
+            properties:
+              ingredients:
+                type: array
+                items:
+                  type: string
+                example: ["spaghetti", "eggs", "bacon"]
+          - required: ['instructions']
+            properties:
+              instructions:
+                type: string
+                example: "Boil spaghetti, cook bacon, mix with eggs."
+          - required: ['name', 'ingredients']
+            properties:
+              name:
+                type: string
+                example: "Spaghetti Carbonara"
+              ingredients:
+                type: array
+                items:
+                  type: string
+                example: ["spaghetti", "eggs", "bacon"]
+              instructions:
+                type: string
+                example: "Boil spaghetti, cook bacon, mix with eggs."
+responses:
+  '200':
+    $ref: ../../../components/responses/recipe/update/200-u.yaml
+  '400':
+    $ref: ../../../components/responses/recipe/400.yaml
+  '401':
+    $ref: ../../../components/responses/recipe/401.yaml
+  '404':
+    $ref: ../../../components/responses/recipe/404.yaml

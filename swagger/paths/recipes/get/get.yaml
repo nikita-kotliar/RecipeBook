@@ -1,0 +1,21 @@
+tags:
+  - Recipe
+summary: Get a recipe by ID
+operationId: getRecipe
+description: 'Get a recipe by its unique ID'
+security:
+  - bearerAuth: []
+parameters:
+  - name: id
+    in: path
+    required: true
+    schema:
+      type: string
+      example: 6693b609d6192024db757e57
+responses:
+  '200':
+    $ref: ../../../components/responses/recipe/get/200-g.yaml
+  '401':
+    $ref: ../../../components/responses/recipe/401.yaml
+  '404':
+    $ref: ../../../components/responses/recipe/404.yaml
