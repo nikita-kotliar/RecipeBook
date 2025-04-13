@@ -6,11 +6,7 @@ export const createRecipeSchema = Joi.object({
     'string.min': 'The title should have at least 3 characters.',
     'any.required': 'The title is required.',
   }),
-  image: Joi.string().uri().required().messages({
-    'string.base': 'The image URL should be a string.',
-    'string.uri': 'The image should be a valid URL.',
-    'any.required': 'The image URL is required.',
-  }),
+  image: Joi.string().uri().messages({}),
   ingredients: Joi.array()
     .items(Joi.string().required())
     .min(1)
