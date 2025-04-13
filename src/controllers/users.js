@@ -22,8 +22,7 @@ import { abort } from 'node:process';
 export const googleAuth = async (req, res, next) => {
   const stringifiedParams = queryString.stringify({
     client_id: process.env.GOOGLE_CLIENT_ID,
-    redirect_uri:
-      'https://project-aquatrack-back.onrender.com/users/google-redirect',
+    redirect_uri: 'https://recipebook-uicq.onrender.com/users/google-redirect',
     scope: [
       'https://www.googleapis.com/auth/userinfo.email',
       'https://www.googleapis.com/auth/userinfo.profile',
@@ -52,7 +51,7 @@ export const googleRedirect = async (req, res, next) => {
       client_id: process.env.GOOGLE_CLIENT_ID,
       client_secret: process.env.GOOGLE_CLIENT_SECRET,
       redirect_uri:
-        'https://project-aquatrack-back.onrender.com/users/google-redirect',
+        'https://recipebook-uicq.onrender.com/users/google-redirect',
       grant_type: 'authorization_code',
       code,
     }),
@@ -102,10 +101,6 @@ export const googleRedirect = async (req, res, next) => {
     email: user.email,
     name: user.name,
     about: user.about,
-    // weight: user.weight,
-    // dailyActiveTime: user.dailyActiveTime,
-    // dailyWaterConsumption: user.dailyWaterConsumption,
-    // gender: user.gender,
     photo: user.photo,
   };
 
@@ -149,10 +144,6 @@ export const login = async (req, res, next) => {
       email: user.email,
       name: user.name,
       about: user.about,
-      // weight: user.weight,
-      // dailyActiveTime: user.dailyActiveTime,
-      // dailyWaterConsumption: user.dailyWaterConsumption,
-      // gender: user.gender,
       photo: user.photo,
     },
   });
@@ -169,10 +160,6 @@ export const currentUser = async (req, res, next) => {
   const {
     name,
     about,
-    // weight,
-    // dailyActiveTime,
-    // dailyWaterConsumption,
-    // gender,
     photo,
     email,
   } = await getCurrentUser(req.user.id);
@@ -181,10 +168,6 @@ export const currentUser = async (req, res, next) => {
     email,
     name,
     about,
-    // weight,
-    // dailyActiveTime,
-    // dailyWaterConsumption,
-    // gender,
     photo,
   });
 };
@@ -194,20 +177,12 @@ export const updateUser = async (req, res, next) => {
     email,
     name,
     about,
-    // weight,
-    // dailyActiveTime,
-    // dailyWaterConsumption,
-    // gender,
     photo,
   } = await updateUserDetails(req.user.id, req.body);
   res.json({
     email,
     name,
     about,
-    // weight,
-    // dailyActiveTime,
-    // dailyWaterConsumption,
-    // gender,
     photo,
   });
 };

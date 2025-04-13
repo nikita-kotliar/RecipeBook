@@ -18,20 +18,16 @@ const router = Router();
 
 router.use(checkAuth);
 
-// Створити рецепт
 router.post(
   '/',
   validateBody(createRecipeSchema),
   ctrlWrapper(createRecipeController),
 );
 
-// Отримати всі рецепти користувача
 router.get('/', ctrlWrapper(getAllRecipesController));
 
-// Отримати рецепт за id
 router.get('/:id', validateMongoId('id'), ctrlWrapper(getRecipeByIdController));
 
-// Оновити рецепт
 router.patch(
   '/:id',
   validateBody(updateRecipeSchema),
@@ -39,14 +35,13 @@ router.patch(
   ctrlWrapper(updateRecipeController),
 );
 
-// Видалити рецепт
 router.delete(
   '/:id',
   validateMongoId('id'),
   ctrlWrapper(deleteRecipeController),
 );
 
-// Отримати улюблені рецепти
+
 router.get('/favorites/all', ctrlWrapper(getFavoriteRecipesController));
 
 export default router;

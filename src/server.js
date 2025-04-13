@@ -10,7 +10,7 @@ import router from './routers/index.js';
 
 const allowedOrigins = {
   origin: [
-    // 'https://project-aqua-track-front.vercel.app',
+    // 'https://project.vercel.app',
     'http://localhost:5173',
   ],
   credentials: true,
@@ -18,19 +18,10 @@ const allowedOrigins = {
 
 const corsOptions = {
   origin: [
-    // 'https://project-aqua-track-front.vercel.app',
+    // 'https://project.vercel.app',
     'http://localhost:5173',
   ],
   credentials: true,
-  // optionSuccessStatus: 200,
-  // Headers: true,
-  // exposedHeaders: 'Set-Cookie',
-  // methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
-  // allowedHeaders: [
-  //   'Access-Control-Allow-Origin',
-  //   'Content-Type',
-  //   'Authorization',
-  // ],
 };
 
 export const setupServer = () => {

@@ -23,23 +23,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-    // weight: {
-    //   type: Number,
-    //   default: 0,
-    // },
-    // dailyActiveTime: {
-    //   type: Number,
-    //   default: 0,
-    // },
-    // dailyWaterConsumption: {
-    //   type: Number,
-    //   default: 1.5,
-    // },
-    // gender: {
-    //   type: String,
-    //   enum: ['woman', 'man'],
-    //   default: 'woman',
-    // },
     photo: {
       type: String,
       default: null,

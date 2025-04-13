@@ -57,10 +57,6 @@ export const getCurrentUser = async (userId) => {
     userId,
     'name photo email about',
   );
-  // return await User.findById(
-  //   userId,
-  //   'name weight dailyActiveTime dailyWaterConsumption gender photo email',
-  // );
 };
 
 export const updateUserDetails = async (userId, data) => {
@@ -72,11 +68,6 @@ export const updateUserDetails = async (userId, data) => {
       fields:
         'name photo email about',
     },
-    // {
-    //   new: true,
-    //   fields:
-    //     'name weight dailyActiveTime dailyWaterConsumption gender photo email',
-    // },
   );
 
   if (!result) {

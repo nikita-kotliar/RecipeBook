@@ -85,7 +85,7 @@ export const getAllRecipesController = async (req, res) => {
 };
 export const getFavoriteRecipesController = async (req, res, next) => {
   try {
-    const userId = req.user.id; // отримуємо ID користувача з токену чи сесії
+    const userId = req.user.id; 
     const favoriteRecipes = await getFavoriteRecipes(userId);
 
     if (!favoriteRecipes || favoriteRecipes.length === 0) {

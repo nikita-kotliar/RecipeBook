@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-// Схема реєстрації користувача
+
 export const registerUserSchema = Joi.object({
   password: Joi.string().min(1).required(),
   email: Joi.string().email().trim().lowercase().required().messages({
@@ -14,7 +14,7 @@ export const registerUserSchema = Joi.object({
   }),
 });
 
-// Схема входу користувача
+
 export const loginUserSchema = Joi.object({
   password: Joi.string().required(),
   email: Joi.string().email().trim().lowercase().required().messages({
@@ -24,7 +24,7 @@ export const loginUserSchema = Joi.object({
   }),
 });
 
-// Схема редагування даних користувача
+
 export const userSchema = Joi.object({
   email: Joi.string().email(),
   name: Joi.string().trim(),
@@ -38,7 +38,6 @@ export const userSchema = Joi.object({
     'object.min': 'At least one field must be filled',
   });
 
-// Схема для повторного надсилання підтвердження email
 export const resendVerifySchema = Joi.object({
   email: Joi.string().email().required(),
 }).messages({ message: 'Missing required field email' });

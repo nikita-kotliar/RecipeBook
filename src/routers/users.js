@@ -25,30 +25,24 @@ import uploadMiddleware from '../middlewares/upload.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
 const router = Router();
-//googleauth
+
 router.get('/google', ctrlWrapper(googleAuth));
 router.get('/google-redirect', ctrlWrapper(googleRedirect));
 
-//register
 router.post(
   '/register',
   validateBody(registerUserSchema),
   ctrlWrapper(register),
 );
 
-//login
 router.post('/login', validateBody(loginUserSchema), ctrlWrapper(login));
 
-//refreshTokens
 router.post('/refresh', ctrlWrapper(refreshTokens));
 
-//logout
 router.post('/logout', ctrlWrapper(logout));
 
-//currentUser
 router.get('/info', checkAuth, ctrlWrapper(currentUser));
 
-//uploadAvatar
 router.patch(
   '/photo',
   checkAuth,
@@ -56,7 +50,6 @@ router.patch(
   ctrlWrapper(uploadAvatar),
 );
 
-//updateUser
 router.patch(
   '/info',
   checkAuth,
@@ -64,7 +57,6 @@ router.patch(
   ctrlWrapper(updateUser),
 );
 
-//getUserCount
 router.get('/count', ctrlWrapper(getUserCount));
 
 router.get('/verify/:verificationToken', ctrlWrapper(verifyEmail));
