@@ -8,7 +8,7 @@ const recipeSchema = new Schema(
     instructions: { type: String, required: true },
     notes: { type: String, default: '' },
     isFavorite: { type: Boolean, default: false },
-    owner: { type: Schema.Types.ObjectId, ref: 'users', required: true },
+    owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   },
   {
     timestamps: true,

@@ -7,10 +7,13 @@ import {
   getAllRecipesByUser,
 } from '../services/recipes.js';
 export const createRecipeController = async (req, res) => {
+  console.log('req.user:', req.user);
   const data = {
     ...req.body,
     owner: req.user.id,
   };
+
+  console.log('payload:', payload);
 
   const recipe = await createRecipe(data);
 
