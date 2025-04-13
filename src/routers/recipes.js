@@ -20,6 +20,7 @@ router.use(checkAuth);
 
 router.post(
   '/',
+  checkAuth,
   validateBody(createRecipeSchema),
   ctrlWrapper(createRecipeController),
 );
