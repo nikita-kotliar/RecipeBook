@@ -7,15 +7,15 @@ import {
   getAllRecipesByUser,
 } from '../services/recipes.js';
 export const createRecipeController = async (req, res) => {
-  console.log('req.user:', req.user);
-  const data = {
+  // console.log('req.user:', req.user);
+  const payload = {
     ...req.body,
-    owner: req.user.id,
+    userId: req.user.id,
   };
 
-  console.log('payload:', payload);
+  // console.log('payload:', payload);
 
-  const recipe = await createRecipe(data);
+  const recipe = await createRecipe(payload);
 
   res.status(201).json({
     status: 201,

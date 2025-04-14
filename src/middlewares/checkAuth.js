@@ -1,49 +1,46 @@
 import jwt from 'jsonwebtoken';
 import User from '../db/models/user.js';
 import createHttpError from 'http-errors';
+import { promisify } from 'util';
+
+const verifyToken = promisify(jwt.verify);
 
 export const checkAuth = async (req, res, next) => {
   try {
     const authorizationHeader = req.headers.authorization;
+    console.log('Authorization Header:', authorizationHeader); // Логування заголовка
 
     if (!authorizationHeader) {
-      next(createHttpError(401, 'Not authorized'));
-      return;
+      return next(createHttpError(401, 'Not authorized: No Authorization Header'));
     }
 
     const [bearer, token] = authorizationHeader.split(' ', 2);
+    console.log('Bearer:', bearer, 'Token:', token); // Логування розбитого заголовка
 
-    if (bearer !== 'Bearer') {
-      next(createHttpError(401, 'Not authorized'));
-      return;
+    if (bearer !== 'Bearer' || !token) {
+      return next(createHttpError(401, 'Not authorized: Invalid Header Format'));
     }
-    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
-      if (err) {
-        next(createHttpError(401, 'Not authorized'));
-        return;
-      }
-      try {
-        const user = await User.findById(decoded.id);
 
-        if (!user || user.token !== token) {
-          next(createHttpError(401, 'Not authorized'));
-          return;
-        }
+    const decoded = await verifyToken(token, process.env.JWT_SECRET);
+    console.log('Decoded:', decoded); // Логування розшифрованого токена
 
-        req.user = {
-          id: decoded.id,
-          email: user.email,
-          name: user.name,
-          about: user.about,
-          photo: user.photo,
-        };
+    const user = await User.findById(decoded.id);
+    console.log('User found:', user); // Логування користувача
 
-        next();
-      } catch (error) {
-        next(error);
-      }
-    });
+    if (!user || user.token !== token) {
+      return next(createHttpError(401, 'Not authorized: User or token mismatch'));
+    }
+
+    req.user = {
+      id: decoded.id,
+      email: user.email,
+      name: user.name,
+      about: user.about,
+      photo: user.photo,
+    };
+
+    next();
   } catch (error) {
-    next(error);
+    return next(createHttpError(401, 'Not authorized: Token verification failed'));
   }
 };

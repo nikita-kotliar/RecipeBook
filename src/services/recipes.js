@@ -3,13 +3,16 @@ import { RecipeCollection } from '../db/models/recipe.js';
 export const createRecipe = async (payload) => {
   const {
     title,
-    image,
+    image = '',
     ingredients,
     instructions,
     notes = '',
     isFavorite = false,
     userId,
   } = payload;
+
+  console.log('Payload:', payload);
+  console.log('User ID:', userId);
 
   const recipe = await RecipeCollection.create({
     title,
