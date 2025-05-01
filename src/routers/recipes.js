@@ -14,6 +14,7 @@ import { validateBody } from '../middlewares/validateBody.js';
 import { createRecipeSchema } from '../validation/createRecipeSchema.js';
 import { updateRecipeSchema } from '../validation/updateRecipeSchema.js';
 import { checkAuth } from '../middlewares/checkAuth.js';
+import uploadMiddleware from '../middlewares/upload.js';
 
 const router = Router();
 
