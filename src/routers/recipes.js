@@ -6,6 +6,7 @@ import {
   deleteRecipeController,
   getAllRecipesController,
   getFavoriteRecipesController,
+  uploadImage,
 } from '../controllers/recipes.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validateMongoId } from '../middlewares/validateMongoId.js';
@@ -28,6 +29,13 @@ router.post(
 router.get('/', ctrlWrapper(getAllRecipesController));
 
 router.get('/:id', validateMongoId('id'), ctrlWrapper(getRecipeByIdController));
+
+router.patch(
+  '/image',
+  checkAuth,
+  uploadMiddleware.single('image'),
+  ctrlWrapper(uploadImage),
+);
 
 router.patch(
   '/:id',

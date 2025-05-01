@@ -75,3 +75,13 @@ export const getFavoriteRecipes = async (userId) => {
   }).lean();
   return favorites.map(({ _id, owner, ...rest }) => ({ id: _id, ...rest }));
 };
+
+export const uploadImageService = async (recipeId, userId, urlImage) => {
+  const { value } = await User.findByIdAndUpdate(
+    { _id: recipeId, owner: userId },
+    { image: urlImage },
+    { new: true, includeResultMetadata: true },
+  );
+
+  return { image: value.image };
+};

@@ -5,6 +5,7 @@ import {
   updateRecipeById,
   deleteRecipeById,
   getAllRecipesByUser,
+  uploadImageService,
 } from '../services/recipes.js';
 export const createRecipeController = async (req, res) => {
   // console.log('req.user:', req.user);
@@ -103,4 +104,14 @@ export const getFavoriteRecipesController = async (req, res, next) => {
   } catch (error) {
     next(createHttpError(500, 'Internal Server Error'));
   }
+};
+
+export const uploadImage = async (req, res, next) => {
+  if (!req.file) {
+    throw createHttpError(400, 'File not provided');
+  }
+  const photo = req.file;
+  const url = await saveFileToCloudinary(image);
+  const data = await uploadImageService(req.user.id, url);
+  res.json(data);
 };
