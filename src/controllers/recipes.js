@@ -109,12 +109,25 @@ export const getFavoriteRecipesController = async (req, res, next) => {
   }
 };
 
+// export const uploadImage = async (req, res, next) => {
+//   if (!req.file) {
+//     throw createHttpError(400, 'File not provided');
+//   }
+//   const image = req.file;
+//   const url = await saveFileToCloudinary(image);
+//   const data = await uploadImageService(recipeId, req.user.id, url);
+//   res.json(data);
+// };
+
 export const uploadImage = async (req, res, next) => {
-  if (!req.file) {
-    throw createHttpError(400, 'File not provided');
-  }
-  const photo = req.file;
-  const url = await saveFileToCloudinary(image);
-  const data = await uploadImageService(req.user.id, url);
-  res.json(data);
+    if (!req.file) {
+      throw createHttpError(400, 'File not provided');
+    }
+
+    const recipeId = req.params.id; // 🔥 ось тут беремо recipeId
+
+    const url = await saveFileToCloudinary(req.file); // cloudinary повертає URL
+    const data = await uploadImageService(recipeId, req.user.id, url);
+
+    res.json(data);
 };

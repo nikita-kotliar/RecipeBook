@@ -32,7 +32,7 @@ router.get('/', ctrlWrapper(getAllRecipesController));
 router.get('/:id', validateMongoId('id'), ctrlWrapper(getRecipeByIdController));
 
 router.patch(
-  '/image',
+  '/:id/image',
   checkAuth,
   uploadMiddleware.single('image'),
   ctrlWrapper(uploadImage),

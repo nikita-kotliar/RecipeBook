@@ -1,5 +1,6 @@
 import { RecipeCollection } from '../db/models/recipe.js';
 
+
 export const createRecipe = async (payload) => {
   const {
     title,
@@ -75,13 +76,12 @@ export const getFavoriteRecipes = async (userId) => {
   }).lean();
   return favorites.map(({ _id, owner, ...rest }) => ({ id: _id, ...rest }));
 };
-
 export const uploadImageService = async (recipeId, userId, urlImage) => {
-  const { value } = await User.findByIdAndUpdate(
+  const updatedRecipe = await RecipeCollection.findOneAndUpdate(
     { _id: recipeId, owner: userId },
     { image: urlImage },
-    { new: true, includeResultMetadata: true },
+    { new: true },
   );
 
-  return { image: value.image };
+  return { image: updatedRecipe.image };
 };
