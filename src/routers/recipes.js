@@ -7,6 +7,8 @@ import {
   getAllRecipesController,
   getFavoriteRecipesController,
   uploadImage,
+  markAsFavorite,
+  unmarkAsFavorite,
 } from '../controllers/recipes.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validateMongoId } from '../middlewares/validateMongoId.js';
@@ -53,5 +55,8 @@ router.delete(
 
 
 router.get('/favorites/all', ctrlWrapper(getFavoriteRecipesController));
+
+router.patch('/:id/favorite', checkAuth, ctrlWrapper(markAsFavorite));
+router.patch('/:id/unfavorite', checkAuth, ctrlWrapper(unmarkAsFavorite));
 
 export default router;
