@@ -92,8 +92,13 @@ export const getAllRecipesController = async (req, res) => {
 };
 export const getFavoriteRecipesController = async (req, res, next) => {
   try {
+    console.log('req.user:', req.user);
+
     const userId = req.user.id; 
     const favoriteRecipes = await getFavoriteRecipes(userId);
+
+    console.log('userId:', userId);
+    console.log('favoriteRecipes:', favoriteRecipes);
 
     if (!favoriteRecipes || favoriteRecipes.length === 0) {
       return next(createHttpError(404, 'No favorite recipes found.'));
