@@ -136,7 +136,7 @@ export const markAsFavorite = async (req, res) => {
   const { id } = req.params;
   const userId = req.user.id;
 
-  const recipe = await цціфчId(id, userId, { isFavorite: true });
+  const recipe = await updateRecipeById(id, userId, { isFavorite: true });
   if (!recipe) return res.status(404).json({ message: 'Recipe not found' });
 
   res.status(200).json(recipe);
