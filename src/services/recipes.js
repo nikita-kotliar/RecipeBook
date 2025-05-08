@@ -74,7 +74,6 @@ export const getFavoriteRecipes = async (userId) => {
     owner: userId,
     isFavorite: true,
   }).lean();
-  console.log('Favorites:', favorites);
   return favorites.map(({ _id, owner, ...rest }) => ({ id: _id, ...rest }));
 };
 export const uploadImageService = async (recipeId, userId, urlImage) => {
