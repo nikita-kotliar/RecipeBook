@@ -93,19 +93,14 @@ export const getAllRecipesController = async (req, res) => {
 };
 export const getFavoriteRecipesController = async (req, res, next) => {
   try {
-
-    const userId = req.user.id; 
+    const userId = req.user.id;
     const favoriteRecipes = await getFavoriteRecipes(userId);
 
-
-    if (!favoriteRecipes || favoriteRecipes.length === 0) {
-      return next(createHttpError(404, 'No favorite recipes found.'));
-    }
-
+    // Якщо улюблені рецепти не знайдено, повертаємо порожній масив
     res.status(200).json({
       status: 200,
       message: 'Successfully fetched favorite recipes!',
-      data: favoriteRecipes,
+      data: favoriteRecipes || [], // Повертаємо пустий масив, якщо не знайдено
     });
   } catch (error) {
     next(createHttpError(500, 'Internal Server Error'));
