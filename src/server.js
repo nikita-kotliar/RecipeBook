@@ -8,19 +8,22 @@ import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { swaggerDocs } from './middlewares/swaggerDocs.js';
 import router from './routers/index.js';
 
-const allowedOrigins = {
-  origin: [
-    'https://recipe-book-ruddy-iota.vercel.app/',
-    'http://localhost:5173',
-  ],
-  credentials: true,
-};
+// Список дозволених origin'ів без '/' в кінці
+const whitelist = [
+  'https://recipe-book-ruddy-iota.vercel.app',
+  'https://recipe-book-ojfs37rwk-nikita-kotliars-projects.vercel.app',
+  'http://localhost:5173',
+];
 
+// Динамічна перевірка origin'ів
 const corsOptions = {
-  origin: [
-    'https://recipe-book-ruddy-iota.vercel.app/',
-    'http://localhost:5173',
-  ],
+  origin: function (origin, callback) {
+    if (!origin || whitelist.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 };
 
@@ -29,9 +32,10 @@ export const setupServer = () => {
   const app = express();
 
   app.use(cors(corsOptions));
+  app.options('*', cors(corsOptions)); // Обробка preflight
+
   app.use(cookieParser());
   app.use(express.json());
-
   app.use(express.urlencoded({ extended: true }));
 
   app.use(router);
