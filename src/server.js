@@ -10,7 +10,7 @@ import router from './routers/index.js';
 
 const allowedOrigins = {
   origin: [
-    // 'https://project.vercel.app',
+    'https://recipe-book-ruddy-iota.vercel.app/',
     'http://localhost:5173',
   ],
   credentials: true,
@@ -18,7 +18,7 @@ const allowedOrigins = {
 
 const corsOptions = {
   origin: [
-    // 'https://project.vercel.app',
+    'https://recipe-book-ruddy-iota.vercel.app/',
     'http://localhost:5173',
   ],
   credentials: true,
