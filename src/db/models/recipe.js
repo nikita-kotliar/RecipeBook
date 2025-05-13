@@ -5,7 +5,7 @@ const recipeSchema = new Schema(
     title: { type: String, required: true },
     image: { type: String },
     ingredients: { type: [String], required: true },
-    instructions: { type: String, required: true },
+    instructions: { type: String, default: '' },
     notes: { type: String, default: '' },
     isFavorite: { type: Boolean, default: false },
     owner: { type: Schema.Types.ObjectId, ref: 'users', required: true },

@@ -6,7 +6,7 @@ export const createRecipe = async (payload) => {
     title,
     image = '',
     ingredients,
-    instructions,
+    instructions = '',
     notes = '',
     isFavorite = false,
     userId,

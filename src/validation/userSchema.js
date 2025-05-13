@@ -28,7 +28,7 @@ export const loginUserSchema = Joi.object({
 export const userSchema = Joi.object({
   email: Joi.string().email(),
   name: Joi.string().trim(),
-  about: Joi.string().max(500).optional().messages({
+  about: Joi.string().allow('').max(500).optional().messages({
     'string.base': 'About must be a string.',
     'string.max': 'About cannot be more than 500 characters.',
   }),
