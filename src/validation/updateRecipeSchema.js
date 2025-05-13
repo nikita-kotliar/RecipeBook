@@ -13,11 +13,10 @@ export const updateRecipeSchema = Joi.object({
     'array.base': 'Ingredients should be an array of strings.',
     'array.min': 'There must be at least one ingredient.',
   }),
-  instructions: Joi.string().min(10).messages({
+  instructions: Joi.string().allow('').messages({
     'string.base': 'Instructions should be a string.',
-    'string.min': 'Instructions should be at least 10 characters long.',
   }),
-  notes: Joi.string().optional().messages({
+  notes: Joi.string().allow('').optional().messages({
     'string.base': 'Notes should be a string.',
   }),
   isFavorite: Joi.boolean().messages({
