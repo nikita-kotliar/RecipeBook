@@ -12,7 +12,6 @@ import {
   refreshTokens,
   googleAuth,
   googleRedirect,
-  handleGoogleAuth,
 } from '../controllers/users.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import {
