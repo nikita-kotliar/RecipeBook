@@ -12,6 +12,7 @@ import {
   refreshTokens,
   googleAuth,
   googleRedirect,
+  handleGoogleAuth,
 } from '../controllers/users.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import {
@@ -28,6 +29,10 @@ const router = Router();
 
 router.get('/google', ctrlWrapper(googleAuth));
 router.get('/google-redirect', ctrlWrapper(googleRedirect));
+// новий endpoint
+router.post('/google-auth', ctrlWrapper(handleGoogleAuth));
+
+
 
 router.post(
   '/register',

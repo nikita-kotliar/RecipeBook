@@ -36,6 +36,20 @@ export const googleAuth = async (req, res, next) => {
   );
 };
 
+// новий endpoint
+router.post('/google-auth', ctrlWrapper(handleGoogleAuth));
+
+export const handleGoogleAuth = async (req, res) => {
+  const { code } = req.body;
+
+  if (!code) throw createHttpError(400, 'Missing Google auth code');
+
+  // (встав тут решту з googleRedirect: запит до /token, потім до /userinfo, генерація токена)
+
+  return res.status(200).json({ token, user });
+};
+
+
 export const googleRedirect = async (req, res, next) => {
   const fullUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
   const urlObj = new URL(fullUrl);
