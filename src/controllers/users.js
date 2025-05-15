@@ -44,21 +44,18 @@ export const googleRedirect = async (req, res, next) => {
 
   const tokenDataResponse = await fetch(`https://oauth2.googleapis.com/token`, {
     method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       client_id: process.env.GOOGLE_CLIENT_ID,
       client_secret: process.env.GOOGLE_CLIENT_SECRET,
-      redirect_uri:
-        'https://recipebook-uicq.onrender.com/users/google-redirect',
+      redirect_uri: 'https://recipebook-uicq.onrender.com/users/google-redirect',
       grant_type: 'authorization_code',
       code,
     }),
   });
 
   if (tokenDataResponse.status !== 200) {
-    throw createHttpError(500, 'Internal Server Error');
+    throw createHttpError(500, 'Failed to get tokens from Google');
   }
 
   const tokenData = await tokenDataResponse.json();
@@ -70,25 +67,25 @@ export const googleRedirect = async (req, res, next) => {
       headers: {
         Authorization: `Bearer ${tokenData.access_token}`,
       },
-    },
+    }
   );
 
   if (userDataResponse.status !== 200) {
-    throw createHttpError(500, 'Internal Server Error');
+    throw createHttpError(500, 'Failed to get user data from Google');
   }
+
   const userData = await userDataResponse.json();
 
   let user = await User.findOne({ email: userData.email });
   if (!user) {
     const passwordHash = await bcrypt.hash(crypto.randomUUID(), 10);
-
     const verificationToken = crypto.randomUUID();
     user = await User.create({
-      name: userData.name ? userData.name : 'User',
+      name: userData.name || 'User',
       email: userData.email,
       password: passwordHash,
-      verificationToken: verificationToken,
-      photo: userData.picture ? userData.picture : null,
+      verificationToken,
+      photo: userData.picture || null,
       oauth: true,
     });
   }
@@ -97,18 +94,6 @@ export const googleRedirect = async (req, res, next) => {
 
   await User.findByIdAndUpdate(user._id, { token: accessToken });
 
-  const updatedUser = {
-    email: user.email,
-    name: user.name,
-    about: user.about,
-    photo: user.photo,
-  };
-
-  const stringifiedParams = queryString.stringify({
-    token: JSON.stringify(accessToken),
-    user: JSON.stringify(updatedUser),
-  });
-
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
     sameSite: 'none',
@@ -116,8 +101,17 @@ export const googleRedirect = async (req, res, next) => {
     expires: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
   });
 
-  return res.redirect(`${process.env.APP_DOMAIN}/?${stringifiedParams}`);
+  return res.status(200).json({
+    token: accessToken,
+    user: {
+      email: user.email,
+      name: user.name,
+      about: user.about,
+      photo: user.photo,
+    },
+  });
 };
+
 
 export const register = async (req, res, next) => {
   const newUser = await registerUser(req.body);
