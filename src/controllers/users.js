@@ -104,7 +104,7 @@ export const googleRedirect = async (req, res, next) => {
   });
 
   return res.redirect(
-    `https://http://localhost:3000/google-redirect-success`
+    `https://localhost:3000/google-redirect-success`
   );
 };
 
