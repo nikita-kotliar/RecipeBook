@@ -29,9 +29,6 @@ const router = Router();
 
 router.get('/google', ctrlWrapper(googleAuth));
 router.get('/google-redirect', ctrlWrapper(googleRedirect));
-// новий endpoint
-router.post('/google-auth', ctrlWrapper(handleGoogleAuth));
-
 
 
 router.post(

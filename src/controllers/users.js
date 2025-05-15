@@ -36,81 +36,6 @@ export const googleAuth = async (req, res, next) => {
   );
 };
 
-export const handleGoogleAuth = async (req, res) => {
-  const { code } = req.body;
-
-  if (!code) throw createHttpError(400, 'Missing Google auth code');
-
-  const tokenDataResponse = await fetch('https://oauth2.googleapis.com/token', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      client_id: process.env.GOOGLE_CLIENT_ID,
-      client_secret: process.env.GOOGLE_CLIENT_SECRET,
-      redirect_uri: 'https://recipebook-uicq.onrender.com/users/google-redirect',
-      grant_type: 'authorization_code',
-      code,
-    }),
-  });
-
-  if (!tokenDataResponse.ok) {
-    throw createHttpError(500, 'Failed to get tokens from Google');
-  }
-
-  const tokenData = await tokenDataResponse.json();
-
-  const userDataResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${tokenData.access_token}`,
-    },
-  });
-
-  if (!userDataResponse.ok) {
-    throw createHttpError(500, 'Failed to get user data from Google');
-  }
-
-  const userData = await userDataResponse.json();
-
-  let user = await User.findOne({ email: userData.email });
-
-  if (!user) {
-    const passwordHash = await bcrypt.hash(crypto.randomUUID(), 10);
-    const verificationToken = crypto.randomUUID();
-
-    user = await User.create({
-      name: userData.name || 'User',
-      email: userData.email,
-      password: passwordHash,
-      verificationToken,
-      photo: userData.picture || null,
-      oauth: true,
-    });
-  }
-
-  const { accessToken, refreshToken } = generateTokens(user);
-
-  await User.findByIdAndUpdate(user._id, { token: accessToken });
-
-  res.cookie('refreshToken', refreshToken, {
-    httpOnly: true,
-    sameSite: 'none',
-    secure: true,
-    expires: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 днів
-  });
-
-  return res.status(200).json({
-    token: accessToken,
-    user: {
-      email: user.email,
-      name: user.name,
-      about: user.about,
-      photo: user.photo,
-    },
-  });
-};
 
 
 export const googleRedirect = async (req, res, next) => {
@@ -178,16 +103,11 @@ export const googleRedirect = async (req, res, next) => {
     expires: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
   });
 
-  return res.status(200).json({
-    token: accessToken,
-    user: {
-      email: user.email,
-      name: user.name,
-      about: user.about,
-      photo: user.photo,
-    },
-  });
+  return res.redirect(
+    `https://http://localhost:3000/google-redirect-success`
+  );
 };
+
 
 
 export const register = async (req, res, next) => {
