@@ -1,21 +1,21 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import session from 'express-session';  // <-- Імпортуємо express-session
 import { env } from './utils/env.js';
 import { ENV_VARS } from './constants/index.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { swaggerDocs } from './middlewares/swaggerDocs.js';
 import router from './routers/index.js';
+import "./config/passport.js";
 
-// Список дозволених origin'ів без '/' в кінці
 const whitelist = [
   'https://recipe-book-ruddy-iota.vercel.app',
   'https://recipe-book-ojfs37rwk-nikita-kotliars-projects.vercel.app',
   'http://localhost:5173',
 ];
 
-// Динамічна перевірка origin'ів
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || whitelist.includes(origin)) {
@@ -32,14 +32,28 @@ export const setupServer = () => {
   const app = express();
 
   app.use(cors(corsOptions));
-  app.options('*', cors(corsOptions)); // Обробка preflight
+  app.options('*', cors(corsOptions)); // Preflight
 
   app.use(cookieParser());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
+  // 🟢 express-session middleware - ПІДКЛЮЧАЄМО ПЕРЕД passport.session()
+  app.use(
+    session({
+      secret: env('SESSION_SECRET', 'default_secret_key'),
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        secure: env('NODE_ENV') === 'production', // у продакшені true
+        sameSite: 'none', // для cross-site cookie, якщо фронтенд на іншому домені
+      },
+    })
+  );
+  // 🟢 Роути, хендлери
   app.use(router);
-  app.use('/', swaggerDocs());
+  const docsMiddlewares = swaggerDocs();
+  app.use('/api-docs', ...docsMiddlewares);
   app.use(notFoundHandler);
   app.use(errorHandler);
 
@@ -49,6 +63,5 @@ export const setupServer = () => {
       process.exit(1);
     }
     console.log('Server is running on port', PORT);
-    // console.log();
   });
 };

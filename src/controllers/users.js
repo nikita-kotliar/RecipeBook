@@ -12,101 +12,14 @@ import {
 } from '../services/users.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import createHttpError from 'http-errors';
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 import queryString from 'query-string';
 import { generateTokens } from '../utils/generateTokens.js';
 import User from '../db/models/user.js';
 import crypto from 'node:crypto';
 import bcrypt from 'bcryptjs';
-import { abort } from 'node:process';
-
-export const googleAuth = async (req, res, next) => {
-  const stringifiedParams = queryString.stringify({
-    client_id: process.env.GOOGLE_CLIENT_ID,
-    redirect_uri: 'https://recipebook-uicq.onrender.com/users/google-redirect',
-    scope: [
-      'https://www.googleapis.com/auth/userinfo.email',
-      'https://www.googleapis.com/auth/userinfo.profile',
-    ].join(' '),
-    response_type: 'code',
-    access_type: 'offline',
-    prompt: 'consent',
-  });
-  return res.redirect(
-    `https://accounts.google.com/o/oauth2/v2/auth?${stringifiedParams}`,
-  );
-};
-
-
-
-export const googleRedirect = async (req, res, next) => {
-  const fullUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
-  const urlObj = new URL(fullUrl);
-  const urlParams = queryString.parse(urlObj.search);
-  const code = urlParams.code;
-
-  const tokenDataResponse = await fetch(`https://oauth2.googleapis.com/token`, {
-    method: 'post',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      client_id: process.env.GOOGLE_CLIENT_ID,
-      client_secret: process.env.GOOGLE_CLIENT_SECRET,
-      redirect_uri: 'https://recipebook-uicq.onrender.com/users/google-redirect',
-      grant_type: 'authorization_code',
-      code,
-    }),
-  });
-
-  if (tokenDataResponse.status !== 200) {
-    throw createHttpError(500, 'Failed to get tokens from Google');
-  }
-
-  const tokenData = await tokenDataResponse.json();
-
-  const userDataResponse = await fetch(
-    'https://www.googleapis.com/oauth2/v2/userinfo',
-    {
-      method: 'get',
-      headers: {
-        Authorization: `Bearer ${tokenData.access_token}`,
-      },
-    }
-  );
-
-  if (userDataResponse.status !== 200) {
-    throw createHttpError(500, 'Failed to get user data from Google');
-  }
-
-  const userData = await userDataResponse.json();
-
-  let user = await User.findOne({ email: userData.email });
-  if (!user) {
-    const passwordHash = await bcrypt.hash(crypto.randomUUID(), 10);
-    const verificationToken = crypto.randomUUID();
-    user = await User.create({
-      name: userData.name || 'User',
-      email: userData.email,
-      password: passwordHash,
-      verificationToken,
-      photo: userData.picture || null,
-      oauth: true,
-    });
-  }
-
-  const { accessToken, refreshToken } = generateTokens(user);
-
-  await User.findByIdAndUpdate(user._id, { token: accessToken });
-
-  res.cookie('refreshToken', refreshToken, {
-    httpOnly: true,
-    sameSite: 'none',
-    secure: true,
-    expires: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
-  });
-
-  return res.redirect(
-    `localhost:3000/google-redirect-success`
-  );
-};
+dotenv.config();
 
 
 

@@ -2,9 +2,15 @@ import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema(
   {
+    googleId: {
+      type: String,
+      default: null,
+    },
     password: {
       type: String,
-      required: [true, 'Password is required'],
+      required: function () {
+        return !this.googleId;
+      },
     },
     email: {
       type: String,
@@ -29,11 +35,15 @@ const userSchema = new mongoose.Schema(
     },
     verify: {
       type: Boolean,
-      default: false,
+      default: function () {
+        return !!this.googleId;
+      },
     },
     verificationToken: {
       type: String,
-      required: [true, 'Verify token is required'],
+      required: function () {
+        return !this.googleId;
+      },
     },
   },
   {
