@@ -48,10 +48,11 @@ router.get(
 
       res.cookie('accessToken', tokens.accessToken, {
         httpOnly: false,
-        sameSite: 'none',
-        secure: true,
+        sameSite: 'lax', // або 'strict'
+        secure: false,   // вимкнено secure для localhost
         expires: new Date(Date.now() + 15 * 60 * 1000),
       });
+      
 
       res.redirect('http://localhost:5173/google-success');
     } catch (err) {
