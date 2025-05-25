@@ -41,20 +41,21 @@ router.get(
 
       res.cookie('refreshToken', tokens.refreshToken, {
         httpOnly: true,
-        sameSite: 'none',
-        secure: true,
+        sameSite: 'strict',
+        secure: false,
         expires: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
       });
 
       res.cookie('accessToken', tokens.accessToken, {
         httpOnly: false,
-        sameSite: 'lax', // або 'strict'
+        sameSite: 'strict', // або 'strict'
         secure: false,   // вимкнено secure для localhost
         expires: new Date(Date.now() + 15 * 60 * 1000),
       });
       
 
-      res.redirect('http://localhost:5173/google-success');
+      res.redirect(`http://localhost:5173/google-success?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}`);
+
     } catch (err) {
       console.error('Google callback error:', err);
       res.redirect('http://localhost:5173/*'); 
