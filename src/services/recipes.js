@@ -12,8 +12,6 @@ export const createRecipe = async (payload) => {
     userId,
   } = payload;
 
-  // console.log('Payload:', payload);
-  // console.log('User ID:', userId);
 
   const recipe = await RecipeCollection.create({
     title,

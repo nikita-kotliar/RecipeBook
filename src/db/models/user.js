@@ -8,9 +8,7 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: function () {
-        return !this.googleId;
-      },
+      default: null,
     },
     email: {
       type: String,
@@ -45,6 +43,7 @@ const userSchema = new mongoose.Schema(
         return !this.googleId;
       },
     },
+    
   },
   {
     versionKey: false,

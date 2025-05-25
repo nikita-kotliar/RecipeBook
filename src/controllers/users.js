@@ -5,20 +5,12 @@ import {
   logoutUser,
   updateUserDetails,
   getCurrentUser,
-  verifyUserEmail,
-  resendVerificationEmail,
   getUserCountService,
   uploadAvatarService,
 } from '../services/users.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import createHttpError from 'http-errors';
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import queryString from 'query-string';
-import { generateTokens } from '../utils/generateTokens.js';
-import User from '../db/models/user.js';
-import crypto from 'node:crypto';
-import bcrypt from 'bcryptjs';
 dotenv.config();
 
 
@@ -66,6 +58,7 @@ export const currentUser = async (req, res, next) => {
     about,
     photo,
     email,
+    password,
   } = await getCurrentUser(req.user.id);
 
   res.json({
@@ -73,6 +66,7 @@ export const currentUser = async (req, res, next) => {
     name,
     about,
     photo,
+    password: password,
   });
 };
 
@@ -82,23 +76,15 @@ export const updateUser = async (req, res, next) => {
     name,
     about,
     photo,
+    password,
   } = await updateUserDetails(req.user.id, req.body);
   res.json({
     email,
     name,
     about,
     photo,
+    password: password ? "" : null,
   });
-};
-
-export const verifyEmail = async (req, res, next) => {
-  await verifyUserEmail(req.params.verificationToken);
-  res.json({ message: 'Verification successful' });
-};
-
-export const resendVerifyEmail = async (req, res, next) => {
-  await resendVerificationEmail(req.body.email);
-  res.json({ message: 'Verification email sent' });
 };
 
 export const uploadAvatar = async (req, res, next) => {

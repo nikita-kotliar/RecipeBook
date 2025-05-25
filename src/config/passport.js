@@ -1,7 +1,6 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import User from "../db/models/user.js";
-
 passport.use(
   new GoogleStrategy(
     {
@@ -13,20 +12,48 @@ passport.use(
     },
     async (_, __, profile, done) => {
       try {
-        const existingUser = await User.findOne({ googleId: profile.id });
-
-        if (existingUser) {
-          return done(null, existingUser);
+        const email = profile.emails[0].value;
+    
+        let user = await User.findOne({ email });
+    
+        if (user) {
+          let updated = false;
+    
+          if (!user.googleId) {
+            user.googleId = profile.id;
+            updated = true;
+          }
+    
+          if (!user.photo && profile.photos?.[0]?.value) {
+            user.photo = profile.photos[0].value;
+            updated = true;
+          }
+    
+          if (!user.name && profile.displayName) {
+            user.name = profile.displayName;
+            updated = true;
+          }
+    
+          if (!user.verify) {
+            user.verify = true;
+            updated = true;
+          }
+    
+          if (updated) {
+            await user.save();
+          }
+    
+          return done(null, user);
         }
-
-
+    
         const newUser = await User.create({
           googleId: profile.id,
-          email: profile.emails[0].value,
+          email,
           name: profile.displayName,
-          photo: profile.photos[0].value,
+          photo: profile.photos?.[0]?.value,
+          verify: true,
         });
-
+    
         return done(null, newUser);
       } catch (error) {
         done(error, false);

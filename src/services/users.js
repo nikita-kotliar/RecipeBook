@@ -1,11 +1,13 @@
 import bcrypt from 'bcrypt';
-import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import gravatar from 'gravatar';
 import User from '../db/models/user.js';
-import mail from '../mail/mail.js';
+
 import { generateTokens } from '../utils/generateTokens.js';
 import createHttpError from 'http-errors';
+import crypto from 'crypto';
+
+
 
 export const registerUser = async (data) => {
   const { email, password } = data;
@@ -25,6 +27,7 @@ export const registerUser = async (data) => {
     verificationToken,
   });
 };
+
 
 export const loginUser = async (email, password) => {
   const existedUser = await User.findOne({ email });
@@ -53,21 +56,36 @@ export const logoutUser = async (refreshToken) => {
 };
 
 export const getCurrentUser = async (userId) => {
-  return await User.findById(
-    userId,
-    'name photo email about',
-  );
+  const user = await User.findById(userId, 'name photo email about password');
+
+  if (!user) {
+    throw createHttpError(404, 'User not found');
+  }
+
+  const maskedPassword = user.password === null ? false : true;
+
+
+  return {
+    ...user.toObject(),
+    password: maskedPassword,
+  };
 };
 
+
 export const updateUserDetails = async (userId, data) => {
+  if (!data.password?.trim()) {
+    delete data.password; 
+  } else {
+    data.password = await bcrypt.hash(data.password, 10);
+  }
+
   const result = await User.findByIdAndUpdate(
     userId,
     { $set: data },
     {
       new: true,
-      fields:
-        'name photo email about',
-    },
+      fields: 'name photo email about password'
+    }
   );
 
   if (!result) {
@@ -76,6 +94,9 @@ export const updateUserDetails = async (userId, data) => {
 
   return result;
 };
+
+
+
 
 export const verifyUserEmail = async (verificationToken) => {
   const user = await User.findOne({ verificationToken });
@@ -89,14 +110,6 @@ export const verifyUserEmail = async (verificationToken) => {
   );
 };
 
-export const resendVerificationEmail = async (email) => {
-  const user = await User.findOne({ email });
-  if (user.verify) {
-    throw createHttpError(400, 'Verification has already been passed');
-  }
-
-  await mail.sendMail(email, user.verificationToken);
-};
 
 export const refreshUserSession = async (refreshToken) => {
   let decoded;

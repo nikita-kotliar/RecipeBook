@@ -32,6 +32,7 @@ export const userSchema = Joi.object({
     'string.base': 'About must be a string.',
     'string.max': 'About cannot be more than 500 characters.',
   }),
+  password: Joi.string().min(5).optional(),
 })
   .min(1)
   .messages({

@@ -9,16 +9,13 @@ import {
   getFavoriteRecipes,
 } from '../services/recipes.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
-// import createHttpError from 'http-errors';
 
 export const createRecipeController = async (req, res) => {
-  // console.log('req.user:', req.user);
+
   const payload = {
     ...req.body,
     userId: req.user.id,
   };
-
-  // console.log('payload:', payload);
 
   const recipe = await createRecipe(payload);
 
@@ -96,35 +93,25 @@ export const getFavoriteRecipesController = async (req, res, next) => {
     const userId = req.user.id;
     const favoriteRecipes = await getFavoriteRecipes(userId);
 
-    // Якщо улюблені рецепти не знайдено, повертаємо порожній масив
     res.status(200).json({
       status: 200,
       message: 'Successfully fetched favorite recipes!',
-      data: favoriteRecipes || [], // Повертаємо пустий масив, якщо не знайдено
+      data: favoriteRecipes || [],
     });
   } catch (error) {
     next(createHttpError(500, 'Internal Server Error'));
   }
 };
 
-// export const uploadImage = async (req, res, next) => {
-//   if (!req.file) {
-//     throw createHttpError(400, 'File not provided');
-//   }
-//   const image = req.file;
-//   const url = await saveFileToCloudinary(image);
-//   const data = await uploadImageService(recipeId, req.user.id, url);
-//   res.json(data);
-// };
 
 export const uploadImage = async (req, res, next) => {
     if (!req.file) {
       throw createHttpError(400, 'File not provided');
     }
 
-    const recipeId = req.params.id; // 🔥 ось тут беремо recipeId
+    const recipeId = req.params.id;
 
-    const url = await saveFileToCloudinary(req.file); // cloudinary повертає URL
+    const url = await saveFileToCloudinary(req.file); 
     const data = await uploadImageService(recipeId, req.user.id, url);
 
     res.json(data);
