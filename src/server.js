@@ -8,6 +8,7 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { swaggerDocs } from './middlewares/swaggerDocs.js';
 import router from './routers/index.js';
+import './config/passport.js'
 
 const whitelist = [
   'https://recipe-book-ruddy-iota.vercel.app',
