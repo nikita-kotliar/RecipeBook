@@ -92,7 +92,13 @@ export const updateUserDetails = async (userId, data) => {
     throw createHttpError(404, 'User not found');
   }
 
-  return result;
+  const maskedPassword = result.password === null ? false : true;
+
+  // return result;
+  return {
+    ...result.toObject(),
+    password: maskedPassword,
+  };
 };
 
 

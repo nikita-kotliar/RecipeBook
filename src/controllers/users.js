@@ -83,7 +83,7 @@ export const updateUser = async (req, res, next) => {
     name,
     about,
     photo,
-    password: password ? "" : null,
+    password: password,
   });
 };
 
