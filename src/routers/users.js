@@ -54,11 +54,15 @@ router.get(
       });
       
 
-      res.redirect(`http://localhost:5173/google-success?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}`);
+      res.redirect(
+        `https://recipe-book-git-main-nikita-kotliars-projects.vercel.app/google-success?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}`,
+      );
 
     } catch (err) {
       console.error('Google callback error:', err);
-      res.redirect('http://localhost:5173/*'); 
+      res.redirect(
+        'https://recipe-book-git-main-nikita-kotliars-projects.vercel.app/*',
+      ); 
     }
   }
 );
