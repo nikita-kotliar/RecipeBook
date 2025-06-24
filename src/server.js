@@ -14,6 +14,7 @@ const whitelist = [
   'https://recipe-book-ruddy-iota.vercel.app',
   'https://recipe-book-ojfs37rwk-nikita-kotliars-projects.vercel.app',
   'http://localhost:5173',
+  'https://recipe-book-git-main-nikita-kotliars-projects.vercel.app',
 ];
 
 const corsOptions = {
